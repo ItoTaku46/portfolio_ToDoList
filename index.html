@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Vue.js App</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+  <div id="app">
+    <!-- 絞り込みラジオボタン -->
+    <label v-for="label in options">
+      <input type="radio" v-model="current" v-bind:value="label.value">{{label.label}}
+      <!--modelの値をhtml上で表示する。v-bindで変更がinputのvalueに選択されたlabel.valueが代入され、自動的にcurrentに代入される-->
+    </label>
+
+    ({{computedTodos.length}}件を表示)
+    <!-- ToDo テーブル -->
+    <table>
+      <thead>
+        <tr>
+          <th class="id">ID</th>
+          <th class="comment">コメント</th>
+          <th class="date">期限</th>
+          <th class="state">状態</th>
+          <th class="button">-</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- computedTodosに変更することで、算出後(条件をつけた結果)のデータを表示することができる -->
+        <tr v-for="item in computedTodos" v-bind:key="item.id">
+          <th>{{item.id}}</th>
+          <th>{{item.comment}}</th>
+          <th>{{item.date}}</th>
+          <td class="state">
+            <button v-on:click="doChangeState(item)">
+              <!-- labelsメソッド？に対してitem.stateの数値が渡され、どのような処理が行われているのかがわからない -->
+              {{labels[item.state]}}
+            </button>
+          </td>
+          <td class="button">
+            <button v-on:click.command="doRemove(item)">
+              削除
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 新規登録フォーム -->
+    <h2>新しい作業の追加</h2>
+    <!-- v-on.submit.preventでボタンクリック時にdoAddメソッドが呼び出される -->
+    <form class="add-form" v-on:submit.prevent="doAdd">
+      コメント<input type="text" ref="comment">
+      <!-- <vuejs-datepicker :value="date"></vuejs-datepicker> -->
+      <button type="submit">追加</button>
+    </form>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+  <script src="https://unpkg.com/vuejs-datepicker"></script>
+  <script src="main.js"></script>
+</body>
+
+</html>
